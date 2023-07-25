@@ -12,11 +12,9 @@ function Login() {
   const [userData, setUserData] = useContext(UserContext);
   const navigate = useNavigate();
   const [form, setForm] = useState({});
-
-  useEffect(() => {
-    if (!userData.user) navigate("/login");
-  }, [userData.user, navigate]);
-
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
   const handleSumbit = async (e) => {
     e.preventDefault();
     try {
@@ -34,13 +32,12 @@ function Login() {
       localStorage.setItem("auth-token", loginRes.data.token);
       navigate("/");
     } catch (err) {
-      console.log("problems", err.response.data.msg);
-      alert(err.response.data.msg);
+      console.log(
+        "problems",
+        err.response?.data?.msg || "Unknown error occurred"
+      );
+      alert(err.response?.data?.msg || "Unknown error occurred");
     }
-  };
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   return (

@@ -20,4 +20,33 @@ module.exports = {
       }
     );
   },
+  getQuestion: (callback) => {
+    pool.query(
+      `
+    SELECT question.*, registration.user_name
+    FROM question
+    INNER JOIN registration ON question.user_id = registration.user_id
+    `,
+      (err, result) => {
+        if (err) {
+          return callback(err);
+        }
+        return callback(null, result);
+      }
+    );
+  },
+
+  getPost: (callback) => {
+    pool.query(
+      `
+   SELECT * FROM question;
+`,
+      (err, result) => {
+        if (err) {
+          return callback(err);
+        }
+        return callback(null, result);
+      }
+    );
+  },
 };

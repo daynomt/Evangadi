@@ -10,6 +10,7 @@ import Footer from "./pages/Footer/Footer";
 import Header from "./pages/Header/Header";
 import "../src/Resources/bootstrap.css";
 import Askin from "./pages/Home/askinpage/Askin";
+import AnswerPage from "./pages/Home/question/AnswerPage";
 
 function App() {
   const [userData, setUserData] = useContext(UserContext);
@@ -72,6 +73,16 @@ function App() {
             <>
               <Header />
               <Askin />
+              <Footer />
+            </>
+          }
+        ></Route>
+        <Route
+          path="/answer/:postID"
+          element={
+            <>
+              <Header />
+              <AnswerPage />
               <Footer />
             </>
           }

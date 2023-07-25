@@ -1,15 +1,50 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useContext, useState } from "react";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../context/UserContext";
+
 import "./askin.css";
+
 function Askin() {
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const [userData, setUserData] = useContext(UserContext);
+  const navigate = useNavigate();
+  const [newQuestion, setNewQuestion] = useState(null);
+
   const [form, setForm] = useState({
     questionTitle: "",
     questionDescription: "",
   });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSumbit = async (e) => {
+    e.preventDefault();
+    try {
+      const loginRes = await axios.post(
+        "http://localhost:4000/api/questions/ask",
+        {
+          questionTitle: form.questionTitle,
+          questionDescription: form.questionDescription,
+        },
+        {
+          headers: { "x-auth-token": userData.token },
+        }
+      );
+
+      console.log(loginRes.data);
+      setNewQuestion(loginRes.data.data);
+      // Set the new question data
+      navigate("/");
+    } catch (err) {
+      console.log("problems", err.response.data.msg);
+      alert(err.response.data.msg);
+    }
+  };
+
   return (
     <div className="container">
       <div
@@ -61,7 +96,9 @@ function Askin() {
           </div>
         </div>
         <div className="postButtonDiv">
-          <button className="postButton">Post your question</button>
+          <button className="postButton" onClick={handleSumbit}>
+            Post your question
+          </button>
         </div>
       </div>
     </div>
